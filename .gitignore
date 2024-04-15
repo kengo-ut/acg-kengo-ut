@@ -1,0 +1,71 @@
+# Mac
+.DS_Store
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+.vs
+.vscode
+
+*.vcxproj
+*.pdb
+*.ilk
+*.tlog
+*.sln
+
+CMakeSettings.json
+CMakeFiles
+cmake_install.cmake
+Makefile
+out
+
+# CLion
+.idea
+cmake-build-debug
+cmake-build-release
+
+# External Library
+
+external/glfwlib
+external/glfwbuild
+
+external/eigen-*
+external/eigenlib
+*.DS_Store 
+build
+
+*/main_ans.cpp
+*/shader_ans.vert
+*/shader_ans.frag
+
+!asset/armadillo.obj
