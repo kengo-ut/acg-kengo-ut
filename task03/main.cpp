@@ -70,6 +70,34 @@ void draw_3d_triangle_with_texture(
       Eigen::Matrix4f coeff;
       Eigen::Vector4f rhs;
 
+      // define the coefficient matrix and the right-hand side vector
+      coeff(0, 0) = q0(0);
+      coeff(0, 1) = q1(0);
+      coeff(0, 2) = q2(0);
+      coeff(0, 3) = -s(0);
+      coeff(1, 0) = q0(1);
+      coeff(1, 1) = q1(1);
+      coeff(1, 2) = q2(1);
+      coeff(1, 3) = -s(1);
+      coeff(2, 0) = q0(3);
+      coeff(2, 1) = q1(3);
+      coeff(2, 2) = q2(3);
+      coeff(2, 3) = -1.f;
+      coeff(3, 0) = 1.f;
+      coeff(3, 1) = 1.f;
+      coeff(3, 2) = 1.f;
+      coeff(3, 3) = 0.f;
+      rhs(0) = 0.f;
+      rhs(1) = 0.f;
+      rhs(2) = 0.f;
+      rhs(3) = 1.f;
+
+      // solve the linear system
+      const auto params = coeff.inverse() * rhs;
+      bc(0) = params(0);
+      bc(1) = params(1);
+      bc(2) = params(2);
+
       // do not change below
       auto uv = uv0 * bc[0] + uv1 * bc[1] + uv2 * bc[2]; // uv coordinate of the pixel
       // compute pixel coordinate of the texture
