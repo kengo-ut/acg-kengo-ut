@@ -37,14 +37,60 @@ float SDF(vec3 pos)
 {
   float d0 = sdCappedCylinder(pos, len_cylinder, rad_cylinder);
   // write some code to combine the signed distance fields above to design the object described in the README.md
-  return d0; // comment out and define new distance
+  // SDFs of Rotated Cylinders
+  vec3 pos_rot1 = vec3(pos.y, pos.x, pos.z);
+  float d1 = sdCappedCylinder(pos_rot1, len_cylinder, rad_cylinder);
+  vec3 pos_rot2 = vec3(pos.x, pos.z, pos.y);
+  float d2 = sdCappedCylinder(pos_rot2, len_cylinder, rad_cylinder);
+  // SDF of the Box
+  float d3 = sdBox(pos, vec3(box_size, box_size, box_size));
+  // SDF of the Sphere
+  float d4 = sdSphere(pos, rad_sphere);
+
+  // CSG operations
+  // union of the Cylinders
+  float d5 = min(min(d0, d1), d2);
+  // intersection of the Box and the Sphere
+  float d6 = max(d3, d4);
+  // difference of the union and the intersection
+  float d7 = max(-d5, d6);
+  return d7;
+  // return d0; // comment out and define new distance
 }
 
 /// RGB color at the position `pos`
 vec3 SDF_color(vec3 pos)
 {
   // write some code below to return color (RGB from 0 to 1) to paint the object describe in README.md
-  return vec3(0., 1., 0.); // comment out and define new color
+  // return vec3(0., 1., 0.); // comment out and define new color
+  float d0 = sdCappedCylinder(pos, len_cylinder, rad_cylinder);
+  vec3 pos_rot1 = vec3(pos.y, pos.x, pos.z);
+  float d1 = sdCappedCylinder(pos_rot1, len_cylinder, rad_cylinder);
+  vec3 pos_rot2 = vec3(pos.x, pos.z, pos.y);
+  float d2 = sdCappedCylinder(pos_rot2, len_cylinder, rad_cylinder);
+  float d3 = sdBox(pos, vec3(box_size, box_size, box_size));
+  float d4 = sdSphere(pos, rad_sphere);
+  float d5 = min(min(d0, d1), d2);
+  // float d6 = max(d3, d4);
+
+  // SDF of pos == max(-d5, d6) == max(d3, d4, -d5)
+  // if SDF of pos ==  d3, the pos is nearest to the surface of the box
+  // if SDF of pos ==  d4, the pos is nearest to the surface of the sphere
+  // if SDF of pos == -d5, the pos is nearest to the surface of the union of the cylinders
+  // so we compare SDF of pos with d3, d4, and -d5
+  float sdf_pos = SDF(pos);
+  if (sdf_pos == d3) {
+    // the color of the box
+    return vec3(1., 0., 0.);
+  }
+  else if (sdf_pos == d4) {
+    // the color of the sphere
+    return vec3(0., 0., 1.);
+  }
+  else {
+    // the color of the union of the cylinders
+    return vec3(0., 1., 0.);
+  }
 }
 
 uniform float time; // current time given from CPU
