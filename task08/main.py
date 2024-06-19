@@ -1,15 +1,17 @@
-import os
 import math
-#
-import pyrr
-import numpy as np
+import os
+
 import moderngl
 import moderngl_window as mglw
-from PIL import Image, ImageOps
+import numpy as np
+
 #
 import parse_gltf
-import util_for_task08
 
+#
+import pyrr
+import util_for_task08
+from PIL import Image, ImageOps
 
 
 class HelloWorld(mglw.WindowConfig):
@@ -94,7 +96,7 @@ class HelloWorld(mglw.WindowConfig):
                 continue
             # below, write one or two lines of code to compute `bone2globalTransformation[i_bone]`
             # hint: use numpy.matmul for multiplying nd-array
-            # bone2globalTransformation[i_bone] = ???
+            bone2globalTransformation[i_bone] = np.matmul(bone2globalTransformation[i_bone_parent], bone2relativeTransformation[i_bone])
 
         for i_vtx in range(self.vtx2xyz_ini.shape[0]):  # for each point in mesh
             p0 = self.vtx2xyz_ini[i_vtx]
@@ -109,7 +111,7 @@ class HelloWorld(mglw.WindowConfig):
                 # hint: use np.matmul for matrix multiplication
                 # hint: assume that rig weights w add up to one
 
-                # p1 += ???
+                p1 += np.matmul(globalTransformation, np.matmul(inverseBindingMatrix, p0)) * w
 
             self.vtx2xyz_def[i_vtx] = p1[:3]  # from homogeneous coordinates to the Cartesian coordinates
 
